@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "outDir": "./server/build/",
+        "module": "commonjs",
+        "target": "es5",
+        "jsx": "react",
+        "noImplicitAny": false,
+        "sourceMap": true
+    },
+    "files": [
+        "./typings/index.d.ts",
+        "./server/graphQLServer.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

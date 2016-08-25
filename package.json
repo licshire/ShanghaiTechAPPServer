@@ -1,0 +1,65 @@
+{
+  "name": "shanghaiTechAppServer",
+  "version": "4.0.0",
+  "private": true,
+  "scripts": {
+    "lint-fix": "eslint -c .eslintrc js --fix",
+    "lint": "eslint -c .eslintrc js",
+    "dev": "better-npm-run dev-server"
+  },
+  "betterScripts": {
+    "dev-server": {
+      "command": "nodemon server/graphQLServer.js --exec babel-node",
+      "env": {
+        "GraphQLHost": "localhost",
+        "GraphQLPort": "8964",
+        "NEO4JHost": "localhost",
+        "Neo4jBoltPort": "7867"
+      }
+    }
+  },
+  "dependencies": {
+    "apollo-client": "^0.4.11",
+    "apollo-server": "^0.2.4",
+    "better-npm-run": "0.0.10",
+    "bluebird": "^3.4.1",
+    "body-parser": "^1.15.2",
+    "color": "~0.11.1",
+    "dataloader": "^1.2.0",
+    "eslint-plugin-flowtype": "^2.6.1",
+    "express": "^4.14.0",
+    "graphql": "^0.6.2",
+    "graphql-tag": "^0.1.11",
+    "graphql-tools": "^0.6.4",
+    "is-uuid": "^1.0.2",
+    "lodash": "^4.13.1",
+    "moment": "^2.13.0",
+    "neo4j-driver": "^1.1.0-M01",
+    "node-uuid": "^1.4.7",
+    "nodemon": "^1.10.0",
+    "pretty-error": "^2.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-core": "^6.13.2",
+    "babel-eslint": "^6.0.5",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.13.2",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-register": "^6.11.6",
+    "chai": "^3.5.0",
+    "eslint": "^2.13.1",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.9.2",
+    "mocha": "^2.5.3",
+    "source-map-loader": "^0.1.5",
+    "ts-loader": "^0.8.2"
+  },
+  "keywords": [
+    "es6",
+    "neo4j",
+    "graphQL",
+    "apollo"
+  ]
+}
