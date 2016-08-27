@@ -1,26 +1,26 @@
 ## 目录  
-### [介绍](https://github.com/Learnone/ShanghaiTechAPP/blob/master/docs/hyperNeo4jAPI.md#这是啥)
-- #### [场论有向超图简介](https://github.com/Learnone/ShanghaiTechAPP/blob/master/docs/hyperNeo4jAPI.md#超边类似于标签但这个标签可以带有属性)  
-- #### [API 介绍](https://github.com/Learnone/ShanghaiTechAPP/blob/master/docs/hyperNeo4jAPI.md#这是一个抽象的超图操作-api)
+### [介绍](https://github.com/Learnone/ShanghaiTech/blob/master/docs/hyperNeo4jAPI.md#这是啥)
+- #### [场论有向超图简介](https://github.com/Learnone/ShanghaiTech/blob/master/docs/hyperNeo4jAPI.md#超边类似于标签但这个标签可以带有属性)  
+- #### [API 介绍](https://github.com/Learnone/ShanghaiTech/blob/master/docs/hyperNeo4jAPI.md#这是一个抽象的超图操作-api)
 
 
 ## 这是啥
 
 这是一个以 Neo4j 图论数据库为基础的超图 API，虽然底层只是普通的有向属性图（Directed Property Graph），但如果你从超图的角度来看可以获得许多好处：  
 ### 超边类似于标签，但这个标签可以带有属性
-![drawBackOfUsingLabel1](https://github.com/Learnone/ShanghaiTechAPP/blob/master/docs/pics/drawBackOfUsingLabel1.png?raw=true)
+![drawBackOfUsingLabel1](https://github.com/Learnone/ShanghaiTech/blob/master/docs/pics/drawBackOfUsingLabel1.png?raw=true)
 一般我们会用 Label 或 Tag 将同一类的节点联系起来，这种做法的效率较高，但表达能力不够强。如果需要表达更复杂的知识间关系，我们可以像上图那样，用一块涂抹出来的色块，包住 Node1 和 Node2，效果相当于给 Node1 和 Node2 都加上同样的标签。
-![hyperGraphIsActually](https://github.com/Learnone/ShanghaiTechAPP/blob/master/docs/pics/hyperGraphIsActually.png?raw=true)  
+![hyperGraphIsActually](https://github.com/Learnone/ShanghaiTech/blob/master/docs/pics/hyperGraphIsActually.png?raw=true)  
 涂抹出来的色块是什么？它就是超边：一维的边就是一条线，能连接两个节点，而二维的边就是涂抹出来的一个色块，能包住好几个节点。所以我们可以看到，超边和 Label 一样，都是对节点进行分类的方法。  
 超边可以很方便地描述出这种情况，首先，人类很容易看出上图中节点同时属于黄色的超边，其次，在 Neo4j 中我们也可以用原生的有向图来描述出这样的超边。  
-![drawBackOfUsingLabel2](https://github.com/Learnone/ShanghaiTechAPP/blob/master/docs/pics/drawBackOfUsingLabel2.png?raw=true)  
+![drawBackOfUsingLabel2](https://github.com/Learnone/ShanghaiTech/blob/master/docs/pics/drawBackOfUsingLabel2.png?raw=true)  
 如果节点像上图这样，同时属于多个类别呢？超边可以很方便地描述出来，但是如果想用 Label 描述出这样的关系就麻烦啦，不仅仅是所需的标签数量会爆炸，而且还需要额外的信息来描述标签之间的层次关系。  
-![hypergraphIntro1](https://github.com/Learnone/ShanghaiTechAPP/blob/master/docs/pics/hypergraphIntro1.png?raw=true)  
+![hypergraphIntro1](https://github.com/Learnone/ShanghaiTech/blob/master/docs/pics/hypergraphIntro1.png?raw=true)  
 在超图里，每个节点都可以属于多个超边，例如上图中 Node1 就属于三个超边，其中绿色的超边不是直接包含 Node1，而是通过超边之间的层次关系而间接拥有 Node1。  
 超边之间可以有多种层次关系，取决于业务需要，更多的关系类型会提高推理难度，但有更高的精确性，需要有所取舍。  
-![MultilevelHyperGraph](https://github.com/Learnone/ShanghaiTechAPP/blob/master/docs/pics/MultilevelHyperGraph.png?raw=true)  
+![MultilevelHyperGraph](https://github.com/Learnone/ShanghaiTech/blob/master/docs/pics/MultilevelHyperGraph.png?raw=true)  
 因为在底层上，超图其实是用 Neo4j 的普普通通的点和边实现的，所以我们可以着眼于某些层次，忽略掉这个层次以下的点和以上的超边，只看这一层的超边和点，从而得到超图的一个「一点也不超的图」子图，在上面跑一跑 pagerank 呀，node2vec 呀都是极好的。  
-![fieldDirectedHyperGraph1](https://github.com/Learnone/ShanghaiTechAPP/blob/master/docs/pics/fieldDirectedHyperGraph1.png?raw=true)  
+![fieldDirectedHyperGraph1](https://github.com/Learnone/ShanghaiTech/blob/master/docs/pics/fieldDirectedHyperGraph1.png?raw=true)  
 最后，为了表示「我是你爸爸」这样的有向关系，我们像上图这样引入场的概念，类似于电场或磁场，它有梯度、散度、旋度，能计算出场内每个点之间的「势差」，因此只要说明点在场中的位置，就能根据两个点之间「势」的高低确定两个点之间的方向。需要注意的是这一方案因为表达能力过强，计算效率可能较低。  
 有了有向关系后，就能在业务层模拟谓词等约束条件，当然计算可能会更慢一些。  
 ### 这是一个抽象的超图操作 API  
