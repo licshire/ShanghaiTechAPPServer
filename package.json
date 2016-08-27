@@ -1,6 +1,6 @@
 {
-  "name": "shanghaiTechAppServer",
-  "version": "4.0.0",
+  "name": "shanghaiTechApp",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "lint-fix": "eslint -c .eslintrc js --fix",
