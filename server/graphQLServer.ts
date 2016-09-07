@@ -1,5 +1,3 @@
-// @flow
-
 // instantiate PrettyError, which can then be used to automatically render all error objects
 import PrettyError from 'pretty-error';
 const pretty = new PrettyError();
@@ -7,9 +5,9 @@ pretty.start();
 
 
 import { makeExecutableSchema } from 'graphql-tools';
-import { schema, resolvers } from './schema';
+import { typeDefinitions, resolvers } from './schema';
 const executableSchema = makeExecutableSchema({
-  typeDefs: schema,
+  typeDefs: typeDefinitions,
   resolvers,
 });
 
@@ -17,8 +15,8 @@ import ShanghaiTechKnowledgeGraph from './models/ShanghaiTechKnowledgeGraph';
 import HyperNeo4jConnector from './connectors/HyperNeo4jConnector';
 import TransactionFSConnector from './connectors/TransactionFSConnector';
 
-import express from 'express';
-import bodyParser from 'body-parser';
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
 
 import { apolloExpress, graphiqlExpress } from 'apollo-server';
 

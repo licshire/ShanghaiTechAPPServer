@@ -1,4 +1,4 @@
-{ "extends": "eslint-config-airbnb",
+{ 
   "parser": "babel-eslint",
   "env": {
     "browser": true,
@@ -31,7 +31,7 @@
     "new-cap": 0
   },
   "plugins": [
-    "react", "import", "flowtype"
+    "import"
   ],
   "settings": {
     "import/parser": "babel-eslint",

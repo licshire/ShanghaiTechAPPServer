@@ -1,17 +1,29 @@
 {
-    "compilerOptions": {
-        "outDir": "./server/build/",
-        "module": "commonjs",
-        "target": "es5",
-        "jsx": "react",
-        "noImplicitAny": false,
-        "sourceMap": true
-    },
-    "files": [
-        "./typings/index.d.ts",
-        "./server/graphQLServer.ts"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "jsx": "react",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
+    "removeComments": false,
+    "sourceMap": false,
+    "inlineSourceMap": true,
+    "noEmitHelpers": true
+  },
+  "awesomeTypescriptLoaderOptions": {
+    "useBabel": true,
+    "useCache": false,
+    "emitRequireType": false
+  },
+  "files": [
+    "./typings/index.d.ts",
+    "./server/graphQLServer.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
 }

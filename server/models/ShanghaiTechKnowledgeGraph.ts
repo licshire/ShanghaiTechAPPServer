@@ -1,5 +1,3 @@
-// @flow
-
 type connectors = {
   DBConnector: Object,
   FSConnector: Object
