@@ -5,21 +5,40 @@
   "scripts": {
     "lint-fix": "eslint -c .eslintrc js --fix",
     "lint": "eslint -c .eslintrc js",
-    "dev": "better-npm-run dev-server"
+    "meta": "better-npm-run meta-server",
+    "auth": "better-npm-run auth-server"
   },
   "betterScripts": {
-    "dev-server": {
+    "meta-server": {
       "command": "nodemon server/server.js --exec babel-node",
       "env": {
         "GraphQLHost": "localhost",
         "GraphQLPort": "8964",
-        "NEO4JHost": "localhost",
-        "Neo4jBoltPort": "7867"
+        "Neo4jUserName": "neo4j",
+        "Neo4jPassWord": "j4oen",
+        "Neo4JMetaHost": "192.168.99.100",
+        "Neo4jMetaBoltPort": "32778"
+      }
+    },
+    "auth-server": {
+      "command": "nodemon server/authServer.js --exec babel-node",
+      "env": {
+        "GraphQLHost": "localhost",
+        "GraphQLPort": "8965",
+        "Neo4jUserName": "neo4j",
+        "Neo4jPassWord": "j4oen",
+        "Neo4JAuthHost": "192.168.99.100",
+        "Neo4jAuthBoltPort": "32784",
+        "MEMCACHIER_SERVERS": [
+          "192.168.99.100:32774"
+        ]
       }
     }
   },
   "dependencies": {
     "apollo-server": "^0.2.4",
+    "babel-eslint": "^6.1.2",
+    "bcrypt": "^0.8.7",
     "better-npm-run": "0.0.10",
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
@@ -27,22 +46,26 @@
     "color": "~0.11.1",
     "eslint-plugin-flowtype": "^2.6.1",
     "express": "^4.14.0",
+    "graphql": "^0.7.0",
     "graphql-tools": "^0.6.6",
+    "graphql-typings": "0.0.1-beta-2",
     "is-uuid": "^1.0.2",
+    "js-sha512": "^0.2.2",
     "lodash": "^4.15.0",
+    "memjs": "^0.10.0",
     "moment": "^2.14.1",
     "neo4j-driver": "^1.1.0-M01",
     "node-fetch": "^1.6.0",
     "node-uuid": "^1.4.7",
     "nodemon": "^1.10.0",
     "pokemon-random-name": "^1.0.4",
-    "pretty-error": "^2.0.0"
+    "pretty-error": "^2.0.0",
+    "xml": "^1.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",
     "babel-core": "^6.13.2",
-    "babel-eslint": "^6.0.5",
-    "babel-loader": "^6.2.4",
+    "babel-eslint": "^6.1.2",
     "babel-plugin-syntax-flow": "^6.13.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-flow-strip-types": "^6.14.0",
@@ -53,9 +76,8 @@
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.11.6",
     "chai": "^3.5.0",
-    "eslint": "^2.13.1",
-    "eslint-config-airbnb": "^9.0.1",
-    "eslint-plugin-graphql": "^0.2.4",
+    "eslint": "^3.5.0",
+    "eslint-plugin-flowtype": "^2.16.1",
     "eslint-plugin-import": "^1.14.0",
     "mocha": "^2.5.3"
   },

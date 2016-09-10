@@ -6,14 +6,14 @@
   数据库驱动并没有自带 promise ，我把它包装了一下，并加入了一个事务性开关
 */
 
-
+import Promise from 'bluebird';
 import { v1 as neo4j } from 'neo4j-driver';
 import uuid from 'node-uuid';
 import xml from 'xml';
 import * as path from 'path';
 
-import sequencePromise from '../utils/sequencePromise';
-import fs from '../utils/transaction-fs';
+import sequencePromise from '../../utils/sequencePromise';
+import fs from '../../connectors/TransactionFSConnector/transaction-fs';
 
 import { cleanNodeAndRelationships,
   commitTransactionOfNeo4jAndFs, rollbackTransactionOfNeo4jAndFs,
