@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 
 import {
   API_FAILURE,
+  NO_TOKEN,
 } from './errorTypes';
 
 
@@ -48,8 +49,9 @@ export default class Power51Connector {
   }
 
   get(route, token) {
+    const tokenWithPrefix = `${/\?/.test(route) ? '&' : '?'}token=${token}`;
     return Promise.try(() =>
-      fetch(`${POWER51PATH}/${route}?token=${token}`, {
+      fetch(`${POWER51PATH}/${route}${tokenWithPrefix}`, {
         method: 'GET',
         headers: {},
       })
