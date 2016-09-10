@@ -17,10 +17,15 @@ function addSalt(aString, ...salt) {
 export class Auth {
   memcachedConnector: Object;
   neo4jConnector: Object;
+  fortuneCookieExpire: number;
+  tokenExpire: number;
 
   constructor({ memcachedConnector, neo4jConnector }) {
     this.memcachedConnector = memcachedConnector;
     this.neo4jConnector = neo4jConnector;
+
+    this.fortuneCookieExpire = 300; // sec, == five min
+    this.tokenExpire = 3600 * 24 * 30; // sec, == one month
   }
 
   async login({fortuneCookie, userName, passWord: saltedPassWordFromClient}) {
@@ -42,8 +47,12 @@ export class Auth {
     }
     await this.neo4jConnector.updatePropertyByUUID({ uuid, properties: { passWord: newSaltedPassWord, fortuneCookie } })
 
+    // auth 返回的 token 会在验证服务器上缓存起来，value 是用户元信息
     const momentNow = moment().format('YYYY-MM-DD HH:mm:ss');
-    return addSalt(fortuneCookie, userName, momentNow);
+    const token = addSalt(fortuneCookie, userName, momentNow);
+    const metaData = { token, userName };
+    await this.memcachedConnector.setMemcached(token, JSON.stringify(metaData), this.tokenExpire);
+    return token
   }
 
   // 用户输入账号密码后，点击「登录」用账号向服务器请求 FortuneCookie
@@ -52,7 +61,8 @@ export class Auth {
     try {
       const response = await fetch('http://fortunecookieapi.com/v1/cookie');
       const [{ fortune: { message: fortuneCookie } }] = await response.json();
-      this.memcachedConnector.setMemcached(userName, fortuneCookie, 300);
+      await this.memcachedConnector.setMemcached(userName, fortuneCookie, this.fortuneCookieExpire);
+      
       return fortuneCookie;
     } catch (error) {
       return error.toString();
