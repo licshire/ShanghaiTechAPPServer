@@ -10,7 +10,7 @@ import {
   USERMETA_USE_BEFORE_SET,
   API_FAILURE,
   MODEL_DONT_HAVE_THIS_FIELD,
-} from './errorTypes';
+} from '../constants/errorTypes';
 
 export class Config {
   constructor({ connector }) {

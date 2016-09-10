@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 import {
   API_FAILURE,
   NO_TOKEN,
-} from './errorTypes';
+} from '../../constants/errorTypes';
 
 
 const POWER51PATH = 'http://power51.grootapp.com:31328';

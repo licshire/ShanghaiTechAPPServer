@@ -1,4 +1,4 @@
-export const typeDefinitions = `schema {
+export const typeDefinitions = [`schema {
   query: RootQuery
   mutation: RootMutation
 }
@@ -218,7 +218,7 @@ type SwitchType implements DeviceType {
   isOn: Boolean! # 开还是关，后端叫它 value
 }
 
-`;
+`];
 
 import { property, isEmpty } from 'lodash';
 
