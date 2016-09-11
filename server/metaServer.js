@@ -36,6 +36,9 @@ const endpointURL = "/grahpql";
 const GRAPHQL_PORT = process.env.GraphQLPort;
 const GRAPHQL_HOST = process.env.GraphQLHost; // 仅作显示之用，要改变这个还是得用 nginx 反代出去
 
+const FILE_PORT = process.env.FilePort;
+const FILE_HOST = process.env.FileHost;
+
 const neo4jUserName = process.env.Neo4jUserName;
 const neo4jPassword = process.env.Neo4jPassWord;
 const neo4jHost = process.env.Neo4JMetaHost;

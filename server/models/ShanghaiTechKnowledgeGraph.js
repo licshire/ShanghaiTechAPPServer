@@ -38,6 +38,8 @@ export class ShanghaiTechKnowledgeGraph {
       uuid: fileUUID, title, description, content, mimeType, uri: filePath, createTime: moment().format('YYYY-MM-DD HH:mm:ss')
     });
 
+    await this.DBConnector.createEdgeBetweenUUID({ memeUUID: fileUUID, memePathUUID, label: 'IMPORTS' });
+
     result.memePathUUID = memePathUUID;
     return result;
   }

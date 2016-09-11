@@ -127,9 +127,9 @@ export default class HyperNeo4jConnector {
     const session = this.driver.session();
 
     return session.run(
-        'CREATE (memepath:MEMEPATH { uuid: {uuid}, title: {title}, description: {description}, createTime: {createTime}, updateTime: {createTime}}) RETURN memepath',
-        {uuid, title, description, createTime}
-      )
+      'CREATE (memepath:MEMEPATH { uuid: {uuid}, title: {title}, description: {description}, createTime: {createTime}, updateTime: {createTime}}) RETURN memepath',
+      { uuid, title, description, createTime }
+    )
       .then((result) => {
         if (result.records.length > 1) {
           return Promise.reject('database-mysteriously-broken createMemePath() got more than one result');
@@ -146,9 +146,9 @@ export default class HyperNeo4jConnector {
     const session = this.driver.session();
 
     return session.run(
-        'CREATE (meme:MEME { uuid: {uuid}, title: {title}, description: {description}, uri: {uri}, mimeType: {mimeType}, createTime: {createTime}, updateTime: {createTime}}) RETURN meme',
-        {uuid, title, description, mimeType, uri, createTime}
-      )
+      'CREATE (meme:MEME { uuid: {uuid}, title: {title}, description: {description}, uri: {uri}, mimeType: {mimeType}, createTime: {createTime}, updateTime: {createTime}}) RETURN meme',
+      { uuid, title, description, mimeType, uri, createTime }
+    )
       .then((result) => {
         if (result.records.length > 1) {
           return Promise.reject('database-mysteriously-broken createMeme() got more than one result');
@@ -163,19 +163,20 @@ export default class HyperNeo4jConnector {
 
   createEdgeBetweenUUID({ memeUUID, memePathUUID, label }) {
     const session = this.driver.session();
-      return session.run(
-        'MATCH (meme:MEME { uuid: {memeUUID}, title: {title}, description: {description}, mimeType: {mimeType}, createTime: {createTime}, updateTime: {createTime}}) RETURN meme',
-        {uuid, title, description, mimeType, uri, createTime}
-      )
+    const LABEL = label.toUpperCase();
+    return session.run(
+      `MATCH (meme:MEME { uuid: {memeUUID}}), (memepath:MEMEPATH { uuid: {memePathUUID}}) CREATE (meme)<-[edge:${LABEL}]-(memepath) RETURN edge`,
+      { memeUUID, memePathUUID }
+    )
       .then((result) => {
         if (result.records.length > 1) {
-          return Promise.reject('database-mysteriously-broken createMeme() got more than one result');
+          return Promise.reject('database-mysteriously-broken createEdgeBetweenUUID() got more than one result');
         } else if (result.records.length === 0) {
-          return Promise.reject('bad-parameter-for-database createMeme() got no result, probably providing unexisted uuid?');
+          return Promise.reject('bad-parameter-for-database createEdgeBetweenUUID() got no result, probably providing unexisted uuid?');
         }
 
         session.close();
-        return result.records[0].get('memepath').properties;
-      })
+        return result.records[0].get('edge').properties;
+      }).catch(err => console.log(err))
   }
 }

@@ -5,10 +5,30 @@
   "scripts": {
     "lint-fix": "eslint -c .eslintrc js --fix",
     "lint": "eslint -c .eslintrc js",
+    "file": "better-npm-run file-server",
     "meta": "better-npm-run meta-server",
-    "auth": "better-npm-run auth-server"
+    "auth": "better-npm-run auth-server",
+    "import": "better-npm-run import"
   },
   "betterScripts": {
+    "import": {
+      "command": "nodemon server/importData.js --exec babel-node",
+      "env": {
+        "Neo4jUserName": "neo4j",
+        "Neo4jPassWord": "j4oen",
+        "Neo4JMetaHost": "192.168.99.100",
+        "Neo4jMetaBoltPort": "32787",
+        "FileBasePath": "../ShaiTechFile"
+      }
+    },
+    "file-server": {
+      "command": "nodemon server/fileServer.js --exec babel-node",
+      "env": {
+        "FileHost": "localhost",
+        "FilePort": "8963",
+        "FileBasePath": "../ShaiTechFile"
+      }
+    },
     "meta-server": {
       "command": "nodemon server/metaServer.js --exec babel-node",
       "env": {
@@ -18,6 +38,8 @@
         "Neo4jPassWord": "j4oen",
         "Neo4JMetaHost": "192.168.99.100",
         "Neo4jMetaBoltPort": "32787",
+        "FileHost": "localhost",
+        "FilePort": "8963",
         "FileBasePath": "../ShaiTechFile"
       }
     },
@@ -51,6 +73,7 @@
     "graphql": "^0.7.0",
     "graphql-tools": "^0.6.6",
     "graphql-typings": "0.0.1-beta-2",
+    "h2m": "^0.5.2",
     "is-uuid": "^1.0.2",
     "js-sha512": "^0.2.2",
     "lodash": "^4.15.0",

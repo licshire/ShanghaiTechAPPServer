@@ -40,7 +40,7 @@ export default class TransactionFSConnector {
       .then(() => fs.createWriteStreamT(filePath))
       .then(writeStream => {writeStream.write(markdown); writeStream.end()})
       .then(() => fs.commit())
-      .then(() => filePath);
+      .then(() => path.join(folderUUID, fileUUID, fileUUID + '.md').split(path.sep).join('/'));
     }
     return Promise.reject(`invalid-uuid folderUUID === ${folderUUID} or fileUUID === ${fileUUID} , is not a uuid at TransactionFSConnector.createMarkdown`);
   }

@@ -37,13 +37,13 @@ type RootQuery {
 `];
 
 type StringMemeType = {
-  uuid: string, 
-  title: string, 
-  description: string, 
-  mimeType: string, 
-  uri: string, 
-  createTime: string, 
-  updateTime: string, 
+  uuid: string,
+  title: string,
+  description: string,
+  mimeType: string,
+  uri: string,
+  createTime: string,
+  updateTime: string,
   memePathUUID: string
 };
 
@@ -53,13 +53,12 @@ import fetch from 'node-fetch';
 export const resolvers = {
   RootMutation: {
     createMemePath(root, { title, description }, context) {
-      return context.KnowledgeGraph.createMemePath({title, description});
+      return context.KnowledgeGraph.createMemePath({ title, description });
     },
     async createStringMeme(root, { title, description, content, mimeType, memePathUUID }, context) {
       const result: StringMemeType = await context.KnowledgeGraph.createStringMeme({
         title, description, content, mimeType, memePathUUID
       });
-      console.log(result);
       return result;
     },
   },
@@ -84,7 +83,10 @@ export const resolvers = {
     uri: property('uri'),
     mimeType: property('mimeType'),
     content({ uri }, args, context) {
-      return fetch(uri).then(res => res.text());
+      const FILE_PORT = process.env.FilePort;
+      const FILE_HOST = process.env.FileHost;
+      const url = `http://${FILE_HOST}:${FILE_PORT}/${uri}`;
+      return fetch(url).then(res => res.text());
     },
     createTime: property('createTime'),
     updateTime: property('updateTime'),
