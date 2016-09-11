@@ -1,59 +1,57 @@
-// @flow
 import fs from './transaction-fs';
 
 import { v4 as isuuid } from 'is-uuid';
 import { v4 as uuid } from 'node-uuid';
 import path from 'path';
 
-type userInfo = {
-  userUUID: ?string,
-  basePath: ?string
-};
-
-type returnObject = {
-  success: boolean,
-  reason: ?string
-};
 
 export default class TransactionFSConnector {
   basePath: string;
-  userUUID: string;
-  constructor({ userUUID, basePath }: userInfo) {
 
-    // $FlowFine: flow dont understan what isuuid() does
-    this.userUUID = isuuid(userUUID) ? userUUID : uuid();
-
+  constructor(basePath: string) {
     try {
       let stats = fs.lstatSync(basePath);
       if (!stats.isDirectory()) {
-        throw new Error('basePath-isnot-Dir at TransactionFSConnector');
+        throw new Error('basePath-isnot-Dir TransactionFSConnector()');
       }
-      // $FlowFine: flow dont understan what isDirectory() does
+
       this.basePath = basePath;
     }
     catch (e) {
-        throw e;
+      throw e;
     }
-
   }
 
-  commit(callback: Function = () => {}): Promise<returnObject> {
+  commit(callback: Function = () => {}) {
     return fs.commit(callback)
     .then(() => {success: true})
-    .catch(err => Promise.reject({success: false, reason: `commit-fail ${String(err)} at TransactionFSConnector.commit`}));
+    .catch(err => Promise.reject(`commit-fail ${String(err)} at TransactionFSConnector.commit`));
   }
 
-  rollback(callback: Function = () => {}): Promise<returnObject> {
+  rollback(callback: Function = () => {}) {
     return fs.rollback(callback)
-    .then(result => Promise.reject({success: false, reason: `rollback ${String(result)} at TransactionFSConnector.rollback`}));
+    .then(result => Promise.reject(`rollback ${String(result)} at TransactionFSConnector.rollback`));
   }
 
-  addHyperEdgeFolder(hyperEdgeInfo: {uuid: string}): Promise<returnObject> {
-    if (isuuid(hyperEdgeInfo.uuid)) {
-      return fs.mkdirT(path.join(this.basePath, 'HYPEREDGE', `HYPEREDGE-${hyperEdgeInfo.uuid}`))
-      .then(() => {success: true});
+  createMarkdown({folderUUID, fileUUID, markdown}): Promise<string> {
+    if (isuuid(folderUUID) && isuuid(fileUUID)) {
+      const filePath = path.join(this.basePath, folderUUID, fileUUID, fileUUID + '.md');
+      return fs.mkdirT(path.join(this.basePath, folderUUID, fileUUID ))
+      .then(() => fs.createWriteStreamT(filePath))
+      .then(writeStream => {writeStream.write(markdown); writeStream.end()})
+      .then(() => fs.commit())
+      .then(() => filePath);
     }
-    return Promise.reject({success: false, reason: `invalid-uuid hyperEdgeInfo.uuid === ${hyperEdgeInfo.uuid} ,is not a uuid at TransactionFSConnector.addHyperEdgeFolder`});
+    return Promise.reject(`invalid-uuid folderUUID === ${folderUUID} or fileUUID === ${fileUUID} , is not a uuid at TransactionFSConnector.createMarkdown`);
+  }
+
+  createMemePathFolder({folderUUID}) {
+    if (isuuid(folderUUID)) {
+      return fs.mkdirT(path.join(this.basePath, folderUUID))
+        .then(() => fs.commit())
+        .then(() => folderUUID);
+    }
+    return Promise.reject(`invalid-uuid hyperEdgeInfo.uuid === ${folderUUID} ,is not a uuid at TransactionFSConnector.addHyperEdgeFolder`);
   }
 
 }

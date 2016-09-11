@@ -120,4 +120,62 @@ export default class HyperNeo4jConnector {
         return result.records[0].get('n').properties;
       })
   }
+
+
+  // 需要加强传入参数为空的检查等，还有 uuid 等有没有重复
+  createMemePath({uuid, title, description, createTime}) {
+    const session = this.driver.session();
+
+    return session.run(
+        'CREATE (memepath:MEMEPATH { uuid: {uuid}, title: {title}, description: {description}, createTime: {createTime}, updateTime: {createTime}}) RETURN memepath',
+        {uuid, title, description, createTime}
+      )
+      .then((result) => {
+        if (result.records.length > 1) {
+          return Promise.reject('database-mysteriously-broken createMemePath() got more than one result');
+        } else if (result.records.length === 0) {
+          return Promise.reject('bad-parameter-for-database createMemePath() got no result, probably providing unexisted uuid?');
+        }
+        session.close();
+        return result.records[0].get('memepath').properties;
+      })
+  }
+
+  // 需要加强传入参数为空的检查等，还有 uuid 等有没有重复
+  createStringMeme({ uuid, title, description, mimeType, uri, createTime }) {
+    const session = this.driver.session();
+
+    return session.run(
+        'CREATE (meme:MEME { uuid: {uuid}, title: {title}, description: {description}, uri: {uri}, mimeType: {mimeType}, createTime: {createTime}, updateTime: {createTime}}) RETURN meme',
+        {uuid, title, description, mimeType, uri, createTime}
+      )
+      .then((result) => {
+        if (result.records.length > 1) {
+          return Promise.reject('database-mysteriously-broken createMeme() got more than one result');
+        } else if (result.records.length === 0) {
+          return Promise.reject('bad-parameter-for-database createMeme() got no result, probably providing unexisted uuid?');
+        }
+
+        session.close();
+        return result.records[0].get('meme').properties;
+      })
+  }
+
+  createEdgeBetweenUUID({ memeUUID, memePathUUID, label }) {
+    const session = this.driver.session();
+      return session.run(
+        'MATCH (meme:MEME { uuid: {memeUUID}, title: {title}, description: {description}, mimeType: {mimeType}, createTime: {createTime}, updateTime: {createTime}}) RETURN meme',
+        {uuid, title, description, mimeType, uri, createTime}
+      )
+      .then((result) => {
+        if (result.records.length > 1) {
+          return Promise.reject('database-mysteriously-broken createMeme() got more than one result');
+        } else if (result.records.length === 0) {
+          return Promise.reject('bad-parameter-for-database createMeme() got no result, probably providing unexisted uuid?');
+        }
+
+        session.close();
+        return result.records[0].get('memepath').properties;
+      })
+  }
 }

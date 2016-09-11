@@ -257,16 +257,16 @@ export function addNodeOwnsByUserToHyperEdge(run, userUUID, nodeUUID, hyperEdgeU
 }
 
 export function addOneSiteToNodeThatOwnsByUser(run, userUUID, siteUUID = uuid.v4(), nodeUUID, manualGenerated) {
-    return run({
-      query: 'MATCH (u:USER {uuid: {userUUID}})-[:OWN]->(n:NODE {uuid: {nodeUUID}}) CREATE (s:SITE {uuid: {siteUUID}, manualGenerated: {manualGenerated}})<-[:HAS]-(u) RETURN s.uuid AS uuid',
-      params: {
-        userUUID,
-        nodeUUID,
-        siteUUID,
-        manualGenerated
-      }
-    })
-    .then(result => result[0].get('uuid'));
+  return run({
+    query: 'MATCH (u:USER {uuid: {userUUID}})-[:OWN]->(n:NODE {uuid: {nodeUUID}}) CREATE (s:SITE {uuid: {siteUUID}, manualGenerated: {manualGenerated}})<-[:HAS]-(u) RETURN s.uuid AS uuid',
+    params: {
+      userUUID,
+      nodeUUID,
+      siteUUID,
+      manualGenerated
+    }
+  })
+  .then(result => result[0].get('uuid'));
 }
 
 /*eslint-disable */

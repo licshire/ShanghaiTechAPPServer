@@ -1,5 +1,5 @@
 import * as fsp from 'fs-promise';
-import sequencePromise from './sequencePromise';
+import sequencePromise from '../../utils/sequencePromise';
 import * as path from 'path';
 
 // utils

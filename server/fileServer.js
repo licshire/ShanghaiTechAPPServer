@@ -4,8 +4,9 @@ import * as bodyParser from "body-parser";
 import { apolloExpress, graphiqlExpress } from 'apollo-server';
 
 import { makeExecutableSchema } from 'graphql-tools';
-import { typeDefinitions as rootSchema, resolvers as rootResolvers } from './power51Schema';
-import Power51Connector from './connectors/Power51Connector';
+import { typeDefinitions as rootSchema, resolvers as rootResolvers } from './metaSchema';
+import TransactionFSConnector from './connectors/TransactionFSConnector';
+import Neo4jConnector from './connectors/HyperNeo4jConnector';
 // Put schema together into one array of schema strings
 // and one map of resolvers, like makeExecutableSchema expects
 const schema = [...rootSchema];
@@ -16,7 +17,7 @@ const executableSchema = makeExecutableSchema({
   resolvers,
 });
 
-import { User, Config, PowerEntity, FortuneCookie } from './models/power51Model';
+import { ShanghaiTechKnowledgeGraph } from './models/ShanghaiTechKnowledgeGraph';
 
 const fs = require('fs');
 const babelrc = fs.readFileSync('./.babelrc');
@@ -37,33 +38,21 @@ const GRAPHQL_HOST = process.env.GraphQLHost; // 仅作显示之用，要改变�
 
 const neo4jUserName = process.env.Neo4jUserName;
 const neo4jPassword = process.env.Neo4jPassWord;
-const neo4jHost = process.env.Neo4JAuthHost;
-const neo4jBoltPort = process.env.Neo4jAuthBoltPort;
+const neo4jHost = process.env.Neo4JMetaHost;
+const neo4jBoltPort = process.env.Neo4jMetaBoltPort;
 
 const neo4jConnector = new Neo4jConnector({neo4jUserName, neo4jPassword, neo4jHost, neo4jBoltPort});
-const serverConnector = new Power51Connector();
+const transactionFSConnector = new TransactionFSConnector(process.env.FileBasePath);
 
 
 const graphQLServer = express();
 graphQLServer.use(bodyParser.urlencoded({ extended: true }));
 graphQLServer.use(bodyParser.json());
 graphQLServer.use(endpointURL, apolloExpress(req => {
-    // Get the query, the same way express-graphql does it
-  // https://github.com/graphql/express-graphql/blob/3fa6e68582d6d933d37fa9e841da5d2aa39261cd/src/index.js#L257
-  const query = req.query.query || req.body.query;
-  if (query && query.length > 2000) {
-    // None of our app's queries are this long
-    // Probably indicates someone trying to send an overly expensive query
-    throw new Error('Query too large.');
-  }
-
   return {
     schema: executableSchema,
     context: {
-      Config: new Config({ connector: serverConnector }),
-      User: new User({ connector: serverConnector }),
-      PowerEntity: new PowerEntity({ connector: serverConnector }),
-      FortuneCookie: new FortuneCookie(),
+      KnowledgeGraph: new ShanghaiTechKnowledgeGraph({ DBConnector: neo4jConnector, FSConnector: transactionFSConnector })
     },
   }
 }));

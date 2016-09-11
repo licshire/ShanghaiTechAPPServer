@@ -10,14 +10,15 @@
   },
   "betterScripts": {
     "meta-server": {
-      "command": "nodemon server/server.js --exec babel-node",
+      "command": "nodemon server/metaServer.js --exec babel-node",
       "env": {
         "GraphQLHost": "localhost",
         "GraphQLPort": "8964",
         "Neo4jUserName": "neo4j",
         "Neo4jPassWord": "j4oen",
         "Neo4JMetaHost": "192.168.99.100",
-        "Neo4jMetaBoltPort": "32778"
+        "Neo4jMetaBoltPort": "32787",
+        "FileBasePath": "../ShaiTechFile"
       }
     },
     "auth-server": {
@@ -46,6 +47,7 @@
     "color": "~0.11.1",
     "eslint-plugin-flowtype": "^2.6.1",
     "express": "^4.14.0",
+    "fs-promise": "^0.5.0",
     "graphql": "^0.7.0",
     "graphql-tools": "^0.6.6",
     "graphql-typings": "0.0.1-beta-2",
