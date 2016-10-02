@@ -1,8 +1,10 @@
+import path from 'path';
+import Promise from 'bluebird';
+
 import fs from './transaction-fs';
 
 import { v4 as isuuid } from 'is-uuid';
 import { v4 as uuid } from 'node-uuid';
-import path from 'path';
 
 
 export default class TransactionFSConnector {
@@ -36,10 +38,29 @@ export default class TransactionFSConnector {
   createMarkdown({folderUUID, fileUUID, markdown}): Promise<string> {
     if (isuuid(folderUUID) && isuuid(fileUUID)) {
       const filePath = path.join(this.basePath, folderUUID, fileUUID, fileUUID + '.md');
-      return fs.mkdirT(path.join(this.basePath, folderUUID, fileUUID ))
-      .then(() => fs.createWriteStreamT(filePath))
-      .then(writeStream => {writeStream.write(markdown); writeStream.end()})
-      .then(() => fs.commit())
+      // before
+      return Promise.try(() =>
+        fs.mkdirT(path.join(this.basePath, folderUUID, fileUUID ))
+      )
+      .then(() =>
+        fs.createWriteStreamT(filePath)
+      )
+      .then(writeStream => {
+        writeStream.write(markdown); writeStream.end()
+      })
+      .then(() =>
+        fs.commit()
+      )
+
+
+      // after
+      return _.flow(
+        fs.mkdir(path.join(this.basePath, folderUUID, fileUUID )),
+        fs.createWriteStream(filePath),
+        fs.writeStream(writeStream => {writeStream.write(markdown); writeStream.end()}),
+        fs.commit
+      )
+
       .then(() => path.join(folderUUID, fileUUID, fileUUID + '.md').split(path.sep).join('/'));
     }
     return Promise.reject(`invalid-uuid folderUUID === ${folderUUID} or fileUUID === ${fileUUID} , is not a uuid at TransactionFSConnector.createMarkdown`);

@@ -12,7 +12,7 @@
   },
   "betterScripts": {
     "import": {
-      "command": "nodemon server/importData.js --exec babel-node",
+      "command": "babel-node server/importData.js",
       "env": {
         "Neo4jUserName": "neo4j",
         "Neo4jPassWord": "j4oen",
@@ -59,6 +59,7 @@
     }
   },
   "dependencies": {
+    "apollo-client": "^0.4.14",
     "apollo-server": "^0.2.4",
     "babel-eslint": "^6.1.2",
     "bcrypt": "^0.8.7",

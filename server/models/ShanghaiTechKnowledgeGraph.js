@@ -32,6 +32,7 @@ export class ShanghaiTechKnowledgeGraph {
   async createStringMeme({ title, description, content, mimeType, memePathUUID }) {
 
     const fileUUID = uuid();
+
     const filePath = await this.FSConnector.createMarkdown({ folderUUID: memePathUUID, fileUUID, markdown: content });
 
     const result: { uuid: string, title: string, description: string, mimeType: string, uri: string, createTime: string, updateTime: string } = await this.DBConnector.createStringMeme({
