@@ -1,7 +1,7 @@
 import path from 'path';
 import Promise from 'bluebird';
 
-import fs from './transaction-fs';
+import fs from 'fs-transaction';
 
 import { v4 as isuuid } from 'is-uuid';
 import { v4 as uuid } from 'node-uuid';

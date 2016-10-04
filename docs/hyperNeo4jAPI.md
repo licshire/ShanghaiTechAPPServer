@@ -1,13 +1,17 @@
-## 目录  
-### [介绍](https://github.com/Learnone/ShanghaiTechAPPServer/blob/master/docs/hyperNeo4jAPI.md#这是啥)
-- #### [场论有向超图简介](https://github.com/Learnone/ShanghaiTechAPPServer/blob/master/docs/hyperNeo4jAPI.md#超边类似于标签但这个标签可以带有属性)  
-- #### [API 介绍](https://github.com/Learnone/ShanghaiTechAPPServer/blob/master/docs/hyperNeo4jAPI.md#这是一个抽象的超图操作-api)
+# 目录
+
+## [介绍](https://github.com/Learnone/ShanghaiTechAPPServer/blob/master/docs/hyperNeo4jAPI.md#这是啥)
+
+- ### [场论有向超图简介](https://github.com/Learnone/ShanghaiTechAPPServer/blob/master/docs/hyperNeo4jAPI.md#超边类似于标签但这个标签可以带有属性)
+- ### [API 介绍](https://github.com/Learnone/ShanghaiTechAPPServer/blob/master/docs/hyperNeo4jAPI.md#这是一个抽象的超图操作-api)
 
 
 ## 这是啥
 
 这是一个以 Neo4j 图论数据库为基础的超图 API，虽然底层只是普通的有向属性图（Directed Property Graph），但如果你从超图的角度来看可以获得许多好处：  
+
 ### 超边类似于标签，但这个标签可以带有属性
+
 ![drawBackOfUsingLabel1](https://github.com/Learnone/ShanghaiTechAPPServer/blob/master/docs/pics/drawBackOfUsingLabel1.png?raw=true)
 一般我们会用 Label 或 Tag 将同一类的节点联系起来，这种做法的效率较高，但表达能力不够强。如果需要表达更复杂的知识间关系，我们可以像上图那样，用一块涂抹出来的色块，包住 Node1 和 Node2，效果相当于给 Node1 和 Node2 都加上同样的标签。
 ![hyperGraphIsActually](https://github.com/Learnone/ShanghaiTechAPPServer/blob/master/docs/pics/hyperGraphIsActually.png?raw=true)  
@@ -23,52 +27,10 @@
 ![fieldDirectedHyperGraph1](https://github.com/Learnone/ShanghaiTechAPPServer/blob/master/docs/pics/fieldDirectedHyperGraph1.png?raw=true)  
 最后，为了表示「我是你爸爸」这样的有向关系，我们像上图这样引入场的概念，类似于电场或磁场，它有梯度、散度、旋度，能计算出场内每个点之间的「势差」，因此只要说明点在场中的位置，就能根据两个点之间「势」的高低确定两个点之间的方向。需要注意的是这一方案因为表达能力过强，计算效率可能较低。  
 有了有向关系后，就能在业务层模拟谓词等约束条件，当然计算可能会更慢一些。  
-### 这是一个抽象的超图操作 API  
+
+### 这是一个抽象的超图操作 API
+
 我们提供一系列基本操作，实现对上述超图的查询（Query）和改变（Mutation），并尝试提供事务性（Transaction）。  
-
-## 全局说明
-
-### 注释
-在每个 API 前都加上：
-```javascript
-/*eslint-disable */
-// 字符字
-/*eslint-enable */
-```
-里面是字符字，方便从编辑器的 mimimap 里看到各个 API 的位置，方便撰写和重构。
-字体大小 10，字体黑体，不超过7个英文字符，背景字符 ```　``` 前景字符 ```◆```。
-可以用[字符字生成器](http://life.chacuo.net/convertfont2char)  
-**目前换用 atom 的 minimap titles 包来生成(只支持英文但字比较小可以放下函数名)**  
-
-### 返回值
-以下 API 皆返回一个 Promise<Object>，Object 里含有一项 success: boolean，如果它为 false，请带上错误说明。
-```javascript
-{success: boolean, reason: string, ...}
-```
-### 全局变量
-错误说明需要在写当前 API 文件的 js 文件的最上方定义，用全大写的 const 变量，比如：
-```javascript
-const FAILED_TO_PARSE_USERINFO = Symbol.for('FAILED_TO_PARSE_USERINFO');
-```
-
-###  参数
-
-每个函数都接受一个 neo4j 参数，得自：
-```javascript
-let run = useNeo4jDB('http://192.168.99.100:32780/', 'neo4j', 'j4oen');
-```
-还有大多数函数都接受一个 userInfo 对象，包含用户 UUID ，用于在 neo4j 里查询用户信息节点。
-
-还有一个 fsf: getFsFunctions() 用于获取文件系统操作接口，我希望通过这个方式隔离文件系统操作的具体实现，具体怎么改再看看吧。
-
-所有的这些参数都放在一个对象里传给函数，方便调换顺序还有设置默认值。
-
-### 注释
-
-记得在分支点用中文说明一下写这个分支的理由，在一大块内容结束后说明一下到此为止我们得到了什么数据。
-
-记得在每个函数前面用 [中午转字符字](http://life.chacuo.net/convertfont2char) 生成一个小地图上也看得到的注释，背景用空格，前景随便哪个深色字符，这样 atom 的小地图也能看得清。
-
 
 ## ADD
 
